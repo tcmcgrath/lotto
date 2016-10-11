@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" media="screen" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <title>Minimum Bootstrap HTML Skeleton</title>
+
+    <!-- # Lottery Sim
+
+## Specification
+
+Build a webpage which does the following:
+
+* The user starts with $10 in virtual money.
+* The user enters 4 distinct numbers between 1 and 10, inclusive. (see hint)
+* The user presses a button which costs them $2, and the computer generates four distinct random numbers between 1 and 10 inclusive which are shown to the user.
+* The user wins money based on n, where n is the number of numbers they guessed correctly. No winnings given if there are no matches. For example, you could do (0 = $0, 1 = $2, 2 = $4, 3 = $16, 4 = $64) or something similar.  
+
+## Details
+
+1. Players cannot go into debt. Make sure the player has the money to pay for the lottery ticket. Display an error message if the user has run out of money.
+2. Players should be able to play the same numbers over and over, but can change them if they want.
+3. There is no upper limit to the amount you can win.
+4. Make sure the user has entered valid numbers before they are allowed to play. Display an error message if the user has entered an invalid number.
+5. Display an error message if the user has entered two of the same number
+
+## Above and Beyond
+
+1. Make the page beautiful
+2. Allow the player to purchase more than one "ticket" before rolling the numbers.
+3. Display an animation when the player rolls new numbers.
+4. Use localstorage to keep track of the current high score.
+
+
+## Hint
+
+There are many ways for the user to input some numbers, here are two examples:
+
+Inputs
+
+    <input id="num1" />
+	...
+	var num1 = document.getElementById("num1").value;
+	
+Prompt
+
+	var numbers = prompt("Enter your numbers"); -->
+
+    <style>
+
+    </style>
+
+</head>
+
+<body>
+
+    <div>
+        <div id="init">
+        </div>
+        <div id="getInputs">
+        </div>
+
+    </div>
+    <div class="container">
+        <!-- BUILD A FORM WITH 4 INPUTS AND A BUTTON THAT CALLS A FUNCTION CALLED getInputs   MIN 1 MAX 10, ALL FIELDS REQUIRED--- EACH BUTTON PRESS COST 2$---->
+
+        <form>
+            <input class="form-control" type="number" id="first" min="1" max="10" required/>
+            <input class="form-control" type="number" id="second" min="1" max="10" required/>
+            <input class="form-control" type="number" id="third" min="1" max="10" required/>
+            <input class="form-control" type="number" id="fourth" min="1" max="10" required/>
+        </form>
+
+
+
+        <input onclick="getInputs()" type="submit" value="save">
+
+    </div>
+
+    <script>
+        var wallet;
+        var cost;
+
+
+
+        //user starts 10$
+            
+        function init() {
+            init();
+            
+            
+        }
+            var wallet = 10;
+            var cost = 2;
+            document.getElementById("init").innerHTML = "Hello, Welcome to the lottery system";
+            document.getElementById("init").innerHTML = document.getElementById("init").innerHTML + "</br></br>" + "You are new to the system and you get to start with $10 dollars!";
+
+            document.getElementById("init").innerHTML = document.getElementById("init").innerHTML + "</br></br>" + "Your Wallet = $" + wallet + " dollars";
+
+            document.getElementById("init").innerHTML = document.getElementById("init").innerHTML + "</br></br>" + "Please enters 4 distinct numbers between 1 and 10, inclusive.";
+        
+            
+        
+        function getInputs() {
+            var numArr = [];
+            var validNumsArray = [];
+            var unique = true;
+
+            // numbers form field validation for being blank or not
+            if (document.getElementById("first").value == "" || document.getElementById("second").value == "" || document.getElementById("third").value == "" || document.getElementById("fourth").value == "") {
+                document.getElementById("getInputs").innerHTML = document.getElementById("getInputs").innerHTML + "</br></br>" + "number fields cannot be blank!!";
+            } else {
+                numArr.push(document.getElementById("first").value);
+                numArr.push(document.getElementById("second").value);
+                numArr.push(document.getElementById("third").value);
+                numArr.push(document.getElementById("fourth").value);
+            }
+
+            // checks if the numbers input are between 1 and 10
+            for (var i = 0; i < numArr.length; i++) {
+                //num = i + 1
+                if (numArr[i] < 1 || numArr[i] > 10) {
+                    document.getElementById("getInputs").innerHTML = document.getElementById("getInputs").innerHTML + "</br></br>" + "number field " + num + " cannot be less than 1 or greater than 10!!";
+                } else {
+                    // this should only happen if the number is between 1 and 10
+                    validNumsArray.push(numArr[i]);
+                }
+            }
+
+            console.log("first array: " + numArr);
+            console.log("second array: " + validNumsArray);
+
+            // Check validNumsArray for duplicate numbers
+            for (var i = 0; i < validNumsArray.length; i++) {
+                for (var j = 0; j < validNumsArray.length; j++) {
+                    if (unique == true && i != j) {
+                        if (validNumsArray[i] == validNumsArray[j]) {
+                            document.getElementById("getInputs").innerHTML = document.getElementById("getInputs").innerHTML + "</br></br>" + "You cannot choose duplicate numbers!";
+                            console.log("number " + i + " did not pass duplicate check!");
+                            unique = false;
+                            break;
+                        } else {
+                            console.log("number " + i + " passed duplicate check!");
+                        }
+                    }
+                    if (unique == false) {
+                        break;
+                    }
+                }
+                if (unique == false) {
+                    break;
+                }
+            }
+
+
+            if (unique == true) {
+                document.getElementById("getInputs").innerHTML = document.getElementById("getInputs").innerHTML + "</br></br>" + "You have chosen valid numbers!!";
+                //
+            }
+          
+            
+            //generates four distinct random numbers between 1 and 10  which are shown to the user
+                function getRnd(min, max) {
+                    min = Math.ceil(min);
+                    max = Math.floor(max);
+                    return Math.floor(Math.random() * (max - min + 1)) + min;
+        
+                console.log(min,max);
+                }
+        }
+                    //
+        //            function getNumber(num) {
+                        //if (numArray.length == 0) {
+        //                    numArray.push(num);
+        //                    console.log("Array was empty");
+        //                    return;
+        //                }
+        //
+        //                for (var i = 0; i < numArray.length; i++) {
+        //                    if (num == numArray[i]) {
+        //                        console.log("numbers matched! Num" + num + "Array" + numArray[i]);
+        //                        return;
+        //                    }
+        //                    if (numArray.length == 6) {
+        //                        numArray = [];
+        //
+        //                        return;
+        //                    }
+        //                    console.log("no match! Num" + num + "Array" + numArray[i]);
+        //                }
+        //
+        //                //get the values from the form
+        //                lowHighReturn(a, b, c, d);
+        //
+        //                function lowHighReturn(a, b, c, d) { //gives lowest and highest value in arg
+        //
+        //                    console.log(Math.min(a, b, c, d));
+        //                    console.log(Math.max(a, b, c, d));
+        //
+        //                    //validate the input
+        //                    if ($.inArray(corArray[i], array1) == -1) {
+        //                        //validation rules are
+        //
+        //                        //make sure they can afford the ticket
+        //                        function enoughMoney() {
+        //
+        //
+        //                        }
+        //
+        //                        //all 4 numbers must be unique----DISPLAY ERROR IF #'S ARE INVALID
+        //
+        //                        //compare the users input to the chosen numbers
+        //
+        //                        //store those choices-----decide how to store
+        //
+        //                        //ifone match 2$
+        //                        if
+        //
+        //                        //iftwo match 4$
+        //
+        //                        //ifthree match 16$
+        //
+        //                        //iffour match 64$
+        //
+        //                        //ifno matches no$
+        //
+        //                        //ifbookeeping adjust the wallet with winnings
+        //
+        //                        //show user results
+        //
+        //                        //start again
+        //
+        //
+        //
+        //                        numArray.push(num);
+        //                        console.log(numArray);
+        //
+        //                    }
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <script>
+    </script>
+
+</body>
+
+</html>
+
+
+<!--
+
+function getInputs(){ var num1elem = document.getElementById('num1'); var num2elem = document.getElementById('num2'); var num3elem = document.getElementById('num3'); var num4elem = document.getElementById('num4'); console.log(num1elem.value); //be sure to validate 1st userInput = [num1elem.value, num2elem.value, num3elem.value, num4elem.value]; console.log(userInput);-->
