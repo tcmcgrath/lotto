@@ -101,7 +101,7 @@ Prompt
 
         function init() {
             wallet = 10;
-            console.log('WELLat ' + wallet);
+            console.log('Your wallet is at ' + wallet);
             cost = 2;
             document.getElementById("init").innerHTML = "Hello, Welcome to the lottery system";
             document.getElementById("init").innerHTML = document.getElementById("init").innerHTML + "</br></br>" + "You are new to the system and you get to start with $10 dollars!";
@@ -118,7 +118,7 @@ Prompt
         // ---------gets INPUT from User----AND function of GENERATING random Numbers------
         function playGame() {
             if (wallet < cost) {
-                document.getElementById("YourTotalIs").innerHTML = "Game Over. You are out of money";
+                document.getElementById("YourTotalIs").innerHTML = "Game Over. You need at least $2.00 to bet again.";
 
             } else {
 
@@ -271,7 +271,7 @@ Prompt
         //------green is running total....red is number of matches in each game------
         function walletMath(green, red) {
             green = green - cost;
-            console.log("walletafterbeet" + green);
+            console.log("You have bet $2.00 and this is how much you have left in your wallet " + green);
 
 
             if (red == 0) {
