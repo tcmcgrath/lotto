@@ -59,51 +59,123 @@ Prompt
 
     <div>
         <div id="init">
+            <input onclick="lotteryStart()" type="submit" value="Start Game!">
         </div>
         <div id="getInputs">
         </div>
 
     </div>
-    <div class="container">
+    <div class="container" id="gameField">
+
         <!-- BUILD A FORM WITH 4 INPUTS AND A BUTTON THAT CALLS A FUNCTION CALLED getInputs   MIN 1 MAX 10, ALL FIELDS REQUIRED--- EACH BUTTON PRESS COST 2$---->
 
         <form>
-            <input class="form-control" type="number" id="first" min="1" max="10" required/>
-            <input class="form-control" type="number" id="second" min="1" max="10" required/>
-            <input class="form-control" type="number" id="third" min="1" max="10" required/>
-            <input class="form-control" type="number" id="fourth" min="1" max="10" required/>
+            <div class="col-sm-4">
+                <input class="form-control" type="number" id="first" min="1" max="10" required/>
+                <input class="form-control" type="number" id="second" min="1" max="10" required/>
+                <input class="form-control" type="number" id="third" min="1" max="10" required/>
+                <input class="form-control" type="number" id="fourth" min="1" max="10" required/>
+            </div>
         </form>
 
 
 
-        <input onclick="getInputs()" type="submit" value="save">
+        <input onclick="playGame()" type="submit" value="Place bet ($2)">
 
     </div>
-
+    <div id="YourTotalIs">
+        </divid>
+    </div>
     <script>
         var wallet;
         var cost;
+        var lottoDrawing = [];
+        var userNumbers = [];
 
 
 
-        //user starts 10$
-            
+
+
+
+        //-------------user starts 10$-----Directions for user
+
         function init() {
-            init();
-            
-            
-        }
-            var wallet = 10;
-            var cost = 2;
+            wallet = 10;
+            console.log('WELLat ' + wallet);
+            cost = 2;
             document.getElementById("init").innerHTML = "Hello, Welcome to the lottery system";
             document.getElementById("init").innerHTML = document.getElementById("init").innerHTML + "</br></br>" + "You are new to the system and you get to start with $10 dollars!";
 
             document.getElementById("init").innerHTML = document.getElementById("init").innerHTML + "</br></br>" + "Your Wallet = $" + wallet + " dollars";
 
             document.getElementById("init").innerHTML = document.getElementById("init").innerHTML + "</br></br>" + "Please enters 4 distinct numbers between 1 and 10, inclusive.";
-        
-            
-        
+
+        }
+
+        function lotteryStart() {
+            init();
+        }
+        // ---------gets INPUT from User----AND function of GENERATING random Numbers------
+        function playGame() {
+            if (wallet < cost) {
+                document.getElementById("YourTotalIs").innerHTML = "Game Over. You are out of money";
+
+            } else {
+
+                getInputs();
+                lottoDrawing = [];
+                for (i = 0; i < 4; i++) {
+                    var randomNum = getRnd(1, 10);
+                    uniqueGenNum(lottoDrawing, randomNum);
+                }
+
+                console.log("lotto nums: " + lottoDrawing);
+                var matches = compareArr(userNumbers, lottoDrawing);
+                //            cashResult(matches);
+                wallet = walletMath(wallet, matches);
+                console.log("checKing" + wallet);
+            }
+        }
+
+
+        // ------------checks if the random generated number array has unique.--------
+        function uniqueGenNum(myGenArr, myGenNum) {
+
+            if (myGenArr.includes(myGenNum)) {
+                myGenNum = getRnd(1, 10);
+                uniqueGenNum(myGenArr, myGenNum);
+                console.log("lotto number is not unique")
+            } else {
+                myGenArr.push(myGenNum);
+                console.log("lotto number is unique")
+            }
+
+        }
+        //------------User numbers compared to the Lotto numbers, tells number of matches--------
+        function compareArr(userArr, lottoArr) {
+            var matches = 0;
+
+            for (i = 0; i < lottoArr.length; i++) {
+                var num = parseInt(userArr[i]);
+                console.log(num);
+
+                if (lottoArr.includes(num)) {
+                    matches += 1;
+
+                    console.log("matches equals " + matches);
+                } else {
+
+                    console.log("matches equals " + matches);
+                }
+            }
+
+            matchedNumbersPerBet = matches;
+            console.log(matchedNumbersPerBet);
+            return matchedNumbersPerBet;
+
+        }
+
+
         function getInputs() {
             var numArr = [];
             var validNumsArray = [];
@@ -112,7 +184,8 @@ Prompt
             // numbers form field validation for being blank or not
             if (document.getElementById("first").value == "" || document.getElementById("second").value == "" || document.getElementById("third").value == "" || document.getElementById("fourth").value == "") {
                 document.getElementById("getInputs").innerHTML = document.getElementById("getInputs").innerHTML + "</br></br>" + "number fields cannot be blank!!";
-            } else {
+            } else { //parseInt
+                // numArr.push(parseInt(document.getElementById("first").value));
                 numArr.push(document.getElementById("first").value);
                 numArr.push(document.getElementById("second").value);
                 numArr.push(document.getElementById("third").value);
@@ -127,6 +200,7 @@ Prompt
                 } else {
                     // this should only happen if the number is between 1 and 10
                     validNumsArray.push(numArr[i]);
+                    console.log("number " + i + " passed range check!");
                 }
             }
 
@@ -158,87 +232,72 @@ Prompt
 
             if (unique == true) {
                 document.getElementById("getInputs").innerHTML = document.getElementById("getInputs").innerHTML + "</br></br>" + "You have chosen valid numbers!!";
-                //
+
             }
-          
-            
-            //generates four distinct random numbers between 1 and 10  which are shown to the user
-                function getRnd(min, max) {
-                    min = Math.ceil(min);
-                    max = Math.floor(max);
-                    return Math.floor(Math.random() * (max - min + 1)) + min;
-        
-                console.log(min,max);
-                }
+            // clears global userNumbers array before putting new user numbers into it
+            userNumbers = [];
+            // puts valid chosen user numbers into a global array to allow us to use it in other functions.
+            for (i = 0; i < validNumsArray.length; i++) {
+                userNumbers.push(validNumsArray[i]);
+
+            }
+
+            console.log("user " + userNumbers);
         }
-                    //
-        //            function getNumber(num) {
-                        //if (numArray.length == 0) {
-        //                    numArray.push(num);
-        //                    console.log("Array was empty");
-        //                    return;
-        //                }
-        //
-        //                for (var i = 0; i < numArray.length; i++) {
-        //                    if (num == numArray[i]) {
-        //                        console.log("numbers matched! Num" + num + "Array" + numArray[i]);
-        //                        return;
-        //                    }
-        //                    if (numArray.length == 6) {
-        //                        numArray = [];
-        //
-        //                        return;
-        //                    }
-        //                    console.log("no match! Num" + num + "Array" + numArray[i]);
-        //                }
-        //
-        //                //get the values from the form
-        //                lowHighReturn(a, b, c, d);
-        //
-        //                function lowHighReturn(a, b, c, d) { //gives lowest and highest value in arg
-        //
-        //                    console.log(Math.min(a, b, c, d));
-        //                    console.log(Math.max(a, b, c, d));
-        //
-        //                    //validate the input
-        //                    if ($.inArray(corArray[i], array1) == -1) {
-        //                        //validation rules are
-        //
-        //                        //make sure they can afford the ticket
-        //                        function enoughMoney() {
-        //
-        //
-        //                        }
-        //
-        //                        //all 4 numbers must be unique----DISPLAY ERROR IF #'S ARE INVALID
-        //
-        //                        //compare the users input to the chosen numbers
-        //
-        //                        //store those choices-----decide how to store
-        //
-        //                        //ifone match 2$
-        //                        if
-        //
-        //                        //iftwo match 4$
-        //
-        //                        //ifthree match 16$
-        //
-        //                        //iffour match 64$
-        //
-        //                        //ifno matches no$
-        //
-        //                        //ifbookeeping adjust the wallet with winnings
-        //
-        //                        //show user results
-        //
-        //                        //start again
-        //
-        //
-        //
-        //                        numArray.push(num);
-        //                        console.log(numArray);
-        //
-        //                    }
+
+        function cashResult(matches) {
+            var winnings = 0;
+
+
+            if (matches == 0) {
+                console.log('SORRY');
+
+            } else if (matches == 1) {
+                winnings = 2;
+                console.log('$2');
+            } else if (matches == 2) {
+                winnings = 4;
+                console.log('$4');
+            } else if (matches == 3) {
+                winnings = 16;
+                console.log('$16');
+            } else {
+                (matches == 4)
+                winnings = 64;
+                console.log('$64');
+            }
+            return winnings;
+        }
+        //------green is running total....red is number of matches in each game------
+        function walletMath(green, red) {
+            green = green - cost;
+            console.log("walletafterbeet" + green);
+
+
+            if (red == 0) {
+                console.log('TOTAL' + green);
+
+            } else {
+
+                console.log(green);
+                green = green + cashResult(red);
+                console.log("new Winnings" + green);
+                document.getElementById("YourTotalIs").innerHTML = "Your winnings are " + cashResult(red) + "<br/>";
+                document.getElementById("YourTotalIs").innerHTML = "Your new total is " + green;
+            }
+
+
+            return green;
+        }
+
+        //generates four distinct random numbers between 1 and 10  which are shown to the user
+        function getRnd(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+
+            console.log(min, max);
+        }
     </script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -252,6 +311,3 @@ Prompt
 </html>
 
 
-<!--
-
-function getInputs(){ var num1elem = document.getElementById('num1'); var num2elem = document.getElementById('num2'); var num3elem = document.getElementById('num3'); var num4elem = document.getElementById('num4'); console.log(num1elem.value); //be sure to validate 1st userInput = [num1elem.value, num2elem.value, num3elem.value, num4elem.value]; console.log(userInput);-->
